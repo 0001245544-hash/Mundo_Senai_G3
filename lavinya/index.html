@@ -3,10 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <title>Dialogo com Voce 💙</title>
+
+  <!-- Importa o CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Importa a biblioteca do A-Frame -->
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-  <style>
-    a-text { font-family: 'Arial', sans-serif; }
-  </style>
+
 </head>
 <body>
 
@@ -36,8 +39,7 @@
   </a-entity>
 
   <a-entity id="instrucao" position="0 0.2 -3">
-    <!-- Removidos os acentos também das instruções para evitar bugs de renderização no A-Frame -->
-    <a-text align="center" width="4" color="#94a3b8" font-size="22" 
+    <a-text align="center" width="4" color="#94a3b8" font-size="22"
       value="✅ Sim = Cabeca para cima e para baixo\n❌ Nao = Cabeca para os lados"></a-text>
   </a-entity>
 
@@ -45,110 +47,10 @@
   <a-camera id="camera" position="0 1.6 2">
     <a-cursor color="#fcd34d" fuse="false"></a-cursor>
   </a-camera>
-
-  <!-- ⚡ Logica de Perguntas e Movimentos -->
-  <script>
-    // 💜 Perguntas profundas e acolhedoras (sem acentos)
-    const perguntas = [
-      "Voce tem sido gentil consigo mesmo hoje?",
-      "Sente orgulho de algo que fez ultimamente?",
-      "Ha algo que voce perdoou em si mesmo recentemente?",
-      "Sente que esta no caminho que faz seu coracao feliz?",
-      "Permite-se descansar quando precisa?",
-      "Reconhece o quanto ja cresceu?",
-      "Sente-se cercado de carinho e apoio?",
-      "Da a si mesmo o mesmo amor que da aos outros?",
-      "Acredita que seus sonhos merecem acontecer?",
-      "Sente gratidao por quem voce esta se tornando?"
-    ];
-
-    let indiceAtual = 0;
-    let podeResponder = true;
-    let ultimaInclinacao = 0;
-    let ultimaRotacao = 0;
-    let contadorMovimento = 0;
-    let tipoMovimento = null;
-
-    const perguntaEl = document.querySelector('#pergunta');
-    const respostaEl = document.querySelector('#resposta');
-    const ceuEl = document.querySelector('#ceu');
-    const cameraEl = document.querySelector('#camera');
-
-    // Mostra pergunta inicial
-    function mostrarPergunta() {
-      perguntaEl.setAttribute('value', perguntas[indiceAtual]);
-      respostaEl.setAttribute('value', '');
-      podeResponder = true;
-      ceuEl.setAttribute('color', '#1e293b');
-      contadorMovimento = 0;
-      tipoMovimento = null;
-    }
-
-    // Processa resposta
-    function registrarResposta(tipo) {
-      if (!podeResponder) return;
-      podeResponder = false;
-
-      if (tipo === 'sim') {
-        respostaEl.setAttribute('value', '💛 Voce disse SIM 💛');
-        ceuEl.setAttribute('color', '#14532d');
-      } else {
-        // Removidos os acentos da resposta para manter a consistência visual
-        respostaEl.setAttribute('value', '🤍 Voce disse NAO 🤍\nEsta tudo bem sentir assim.');
-        ceuEl.setAttribute('color', '#312e81');
-      }
-
-      // Proxima pergunta apos 5 segundos
-      setTimeout(() => {
-        indiceAtual = (indiceAtual + 1) % perguntas.length;
-        mostrarPergunta();
-      }, 5000);
-    }
-
-    // 🔄 Detecta movimento da cabeca
-    setInterval(() => {
-      const rotacao = cameraEl.object3D.rotation;
-      const inclinacao = rotacao.x; // Cabeca para cima/baixo
-      const virar = rotacao.y;     // Cabeca para esquerda/direita
-
-      const variacaoInclinacao = Math.abs(inclinacao - ultimaInclinacao);
-      const variacaoVirar = Math.abs(virar - ultimaRotacao);
-
-      // Movimento VERTICAL = SIM
-      if (variacaoInclinacao > 0.08 && variacaoVirar < 0.05) {
-        if (tipoMovimento === null) tipoMovimento = 'sim';
-        if (tipoMovimento === 'sim') {
-          contadorMovimento++;
-          if (contadorMovimento >= 2) {
-            registrarResposta('sim');
-            contadorMovimento = 0;
-            tipoMovimento = null;
-          }
-        }
-      }
-
-      // Movimento HORIZONTAL = NAO
-      if (variacaoVirar > 0.08 && variacaoInclinacao < 0.05) {
-        if (tipoMovimento === null) tipoMovimento = 'nao';
-        if (tipoMovimento === 'nao') {
-          contadorMovimento++;
-          if (contadorMovimento >= 2) {
-            registrarResposta('nao');
-            contadorMovimento = 0;
-            tipoMovimento = null;
-          }
-        }
-      }
-
-      ultimaInclinacao = inclinacao;
-      ultimaRotacao = virar;
-    }, 80);
-
-    // Inicia tudo
-    mostrarPergunta();
-  </script>
-
 </a-scene>
+
+<!-- Importa o JavaScript após carregar o HTML -->
+<script src="javascript.js"></script>
 
 </body>
 </html>

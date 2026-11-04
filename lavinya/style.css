@@ -1,0 +1,20 @@
+ /* Remove margens e preenchimentos padrão do navegador */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Garante que a tela ocupe 100% do espaço sem barras de rolagem */
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #0f172a; /* Fundo escuro enquanto o A-Frame carrega */
+  font-family: 'Arial', sans-serif;
+}
+
+/* Define a fonte padrão para os textos do A-Frame */
+a-text {
+  font-family: 'Arial', sans-serif;
+}
